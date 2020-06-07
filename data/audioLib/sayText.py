@@ -7,29 +7,39 @@ from gtts import gTTS
 from playsound import playsound
 from os import listdir, path, remove
 
+from time import time
+
 language = 'fr'
 cachedAudio = {}
+minDigits = 1
 
 if __name__ == '__main__':
     audio_path = 'audioCache/'
-    json_path = audio_path + 'cachedAudio.json'
+    json_path = 'cachedAudio.json'
 
 else:
     audio_path = 'data/audioLib/audioCache/'
-    json_path = audio_path + 'cachedAudio.json'
+    json_path = 'data/audioLib/cachedAudio.json'
 
 
-def readJSON(path):
-    # read JSON from path, return dictionary output
-    with open(path, 'r') as json_file:
-        output_dict = load(json_file)
-    return output_dict
+def readJSON():
+    # read JSON from json_path, write to cachedAudio
+    global cachedAudio
+
+    with open(json_path, 'r') as json_file:
+        cachedAudio = load(json_file)
+
+    return None
 
 
-def writeJSON(input_dict, path):
-    # read dictionary, write to JSON at path, return nothing
-    with open(path, 'w') as json_file:
-        json_file.write(dumps(input_dict))
+def writeJSON():
+    # read from cachedAudio, write to JSON at json_path
+    global cachedAudio
+
+    with open(json_path, 'w') as json_file:
+        json_file.write(dumps(cachedAudio))
+
+    return None
 
 
 def preprocessText(text):
@@ -38,22 +48,40 @@ def preprocessText(text):
         text = 'Field Empty'
 
     text = text.strip()
+
     return text
 
 
-def generateKey(input_dict):
-    # return 4 digit random key (string) not already in input_dict
-    def generateKeyString():
-        _key = str(randint(0, 9999999))
+def generateKey():
+    # return random key string not already in cachedAudio
+    global cachedAudio, minDigits
 
-        while len(_key) < 8:
-            _key = '0' + _key
+    def generateRandomKey():
+        # return random key string
+        global minDigits
 
-        return _key
+        def maxRange():
+            # return MaxRange with minDigits
+            global minDigits
 
-    key = generateKeyString()
-    while key in input_dict:
-        key = generateKeyString()
+            MaxRange = ''
+            for i in range(minDigits):
+                MaxRange += '9'
+
+            return int(MaxRange)
+
+        while len(cachedAudio) > maxRange():
+            minDigits += 1
+
+        key = str(randint(0, maxRange()))
+        while len(key) < minDigits:
+            key = '0' + key
+
+        return key
+
+    key = generateRandomKey()
+    while key in cachedAudio:
+        key = generateRandomKey()
 
     return key
 
@@ -64,66 +92,63 @@ def KeyToFilePath(key):
     return file_path
 
 
-def entryInDict(input_entry, input_dict):
+def entryInDict(entry):
     # return array with boolean as to whether input_entry is in input_dict,
     # if yes, return key of input_entry, else return placeholder key of '0000'
 
-    for key in input_dict:
-        if input_entry == input_dict[key]:
+    for key in cachedAudio:
+        if entry == cachedAudio[key]:
             return [True, key]
 
     return [False, '0000']
 
 
-def createAudioCache(input_text, input_dict, input_json):
-    # generate unique key
-    key = generateKey(input_dict)
+def createAudioCache(text):
+    # generate unique key, and corresponding path
+    key = generateKey()
+    audioObjPath = KeyToFilePath(key)
 
     # create audio object
-    audioObj = gTTS(text=input_text, lang=language)
+    audioObj = gTTS(text=text, lang=language)
 
     # save audio object to path
-    audio_path = KeyToFilePath(key)
-    audioObj.save(audio_path)
+    audioObj.save(audioObjPath)
 
     # save to runtime dictionary, save to JSON
-    input_dict[key] = input_text
-    writeJSON(input_dict, input_json)
+    cachedAudio[key] = text
+    writeJSON()
 
 
-def sayText(input_text):
+def sayText(text):
     global cachedAudio
 
     # check for empty input, strip()
-    input_text = preprocessText(input_text)
+    text = preprocessText(text)
 
     # load JSON
-    cachedAudio = readJSON(json_path)
+    readJSON()
 
     # check in cachedAudio
-    inAudioCache = entryInDict(input_text, cachedAudio)
-    inAudioCacheBool = inAudioCache[0]
+    inAudioCache = entryInDict(text)
 
-    if inAudioCacheBool:
-        inAudioCacheKey = inAudioCache[1]
-    else:
-        createAudioCache(input_text, cachedAudio, json_path)
-        inAudioCache = entryInDict(input_text, cachedAudio)
-        inAudioCacheKey = inAudioCache[1]
+    if not inAudioCache[0]:
+        # create AudioCache if not present
+        createAudioCache(text)
+        inAudioCache = entryInDict(text)
 
-    audio_path = KeyToFilePath(inAudioCacheKey)
-    playsound(audio_path)
+    # play audio
+    playsound(KeyToFilePath(inAudioCache[1]))
 
 
 def clearAudioCache():
     global cachedAudio
-    lsAudioCache = [_file for _file in listdir(audio_path) if _file.endswith('.mp3')]
+    lsAudioCache = [_file for _file in listdir(audio_path)]
 
     for _file in lsAudioCache:
         remove(path.join(audio_path, _file))
 
     cachedAudio = {}
-    writeJSON(cachedAudio, json_path)
+    writeJSON()
 
 
 if __name__ == '__main__':
@@ -132,16 +157,30 @@ if __name__ == '__main__':
 
     test_root = Tk()
     test_root.geometry(makeGeometry(test_root, 200, 100))
-    entry = Entry(test_root)
-    entry.pack()
+    test_entry = Entry(test_root)
+    test_entry.pack()
 
 
-    def sayTextTest():
-        sayText(entry.get())
+    def sayTextTest(event):
+        sayText(test_entry.get())
 
+    def exitBind(event):
+        exit()
 
-    Button(test_root, text='SayEntryContent', command=sayTextTest).pack()
+    def overflowTest():
+        clearAudioCache()
+
+        for n in range(1000):
+            createAudioCache(str(n))
+
+    test_root.bind('<Return>', sayTextTest)
+    test_root.bind('<Escape>', exitBind)
+
     Button(test_root, text='ClearAudioCache', command=clearAudioCache).pack()
+    Button(test_root, text='OverflowTest', command=overflowTest).pack()
+
+    test_entry.focus()
+
     test_root.mainloop()
 
 

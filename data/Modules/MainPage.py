@@ -50,7 +50,7 @@ class MainPage(object):
 
     def createStartCaseToggle(self):
         self.startCaseToggleButton = MyToggleButton(self.mainFrame, 'Start Case', 0.70, 0.45)
-        self.startCaseToggleButton.pf.place(relwidth=0.10, relheight=0.05)
+        self.startCaseToggleButton.mainFrame.place(relwidth=0.10, relheight=0.05)
 
     def writeto_outputEntry(self, text):
         self.outputEntry.delete(0, END)
@@ -60,10 +60,7 @@ class MainPage(object):
         input_text = self.inputEntry.get()
         output_text = ''
 
-        if input_text == '':
-            return
-
-        else:
+        if input_text != '':
             if self.converterCycleButton.state == 1:
                 output_text = AltCase(input_text, self.startCaseToggleButton.enabled)
             elif self.converterCycleButton.state == 2:

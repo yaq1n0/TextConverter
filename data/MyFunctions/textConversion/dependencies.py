@@ -3,15 +3,14 @@
 # imports
 from random import randint
 
-# constant
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-           'w', 'x', 'y', 'z']
+# do NOT modify
+letters, vowels, consonants = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                               's', 't', 'u', 'v', 'w', 'x', 'y', 'z'], \
+                              ['a', 'e', 'i', 'o', 'u'], \
+                              ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w',
+                               'x', 'y', 'z']
 
-vowels = ['a', 'e', 'i', 'o', 'u']
-
-consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z']
-
-# modify to add
+# can modify
 replace_dict = {
     'rawr ': 'rawr x3',
     'neck ': 'necky wecky ~murr~ ',
@@ -27,7 +26,7 @@ long_cringe = ['uwu.', 'owo.', 'UwU.', 'OwO.', 'UmU.', 'OmO.',
 
 
 def randBool():
-    # return True or False randomly at roughly 50/50 chances
+    # return random boolean value
     var = randint(0, 1)
     if var == 1:
         return True
@@ -35,13 +34,13 @@ def randBool():
         return False
 
 
-def pickRandomList(list):
-    # pick a random element from a list
-    return list[randint(0, len(list) - 1)]
+def pickRandomList(input_list):
+    # return a random element from a list
+    return input_list[randint(0, len(input_list) - 1)]
 
 
 def replaceWord(text):
-    # replace word in text using replace_dict
+    # replace words in text using replace_dict then return
     for elem in replace_dict:
         text = text.replace(elem, replace_dict[elem])
     return text
@@ -94,6 +93,7 @@ if __name__ == '__main__':
 
         print('replaceWord test done!')
 
+
     def testALL():
         printValues()
         print('----------------')
@@ -104,6 +104,7 @@ if __name__ == '__main__':
         replaceWordTest()
         print('----------------')
         print('ALL tests complete')
+
 
     test_choice = input('pick test (printValues, randBool, pickRandomList, replaceWord, ALL): ')
     choice_list = ['printValues', 'randBool', 'pickRandomList', 'replaceWord', 'ALL']
@@ -126,6 +127,3 @@ if __name__ == '__main__':
 
     elif test_choice == 'ALL':
         testALL()
-
-
-

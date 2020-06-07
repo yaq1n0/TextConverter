@@ -4,8 +4,7 @@
 def GrayScale(num):
     if type(num) == int:
         if 0 <= num <= 255:
-            h_num = hex(num)
-            h_num_str = str(h_num)
+            h_num_str = str(hex(num))
 
             if len(h_num_str) == 3:
                 num3 = "0" + h_num_str[-1]

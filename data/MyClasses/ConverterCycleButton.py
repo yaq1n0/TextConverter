@@ -1,8 +1,8 @@
-# custom class for cycling between different conversion
+# custom class for cycling between different conversions
 
 # imports
-from tkinter import Frame
-from data.MyClasses.MyTkWidgets import MyFrame, MyButton
+from data.MyClasses.MyFrame import MyFrame
+from data.MyClasses.MyButton import MyButton
 from data.MyFunctions import GrayScale
 
 
@@ -10,30 +10,16 @@ class ConverterCycleButton(object):
     names_list = ['AltCase', 'RandomCase', 'RegretCase']
 
     class FullButton(MyButton):
-        relx, rely = 0, 0
-        relwidth, relheight = 1, 1
+        relx, rely, relwidth, relheight = 0, 0, 1, 1
 
         def __init__(self, parent, text, command, bgcolor):
-            self.parent = parent
-            self.text = text
-            self.command = command
-            self.bgcolor = bgcolor
+            MyButton.__init__(self, parent, text, command, self.relx, self.rely)
 
-            MyButton.__init__(self, self.parent, self.text, self.command, self.relx, self.rely)
-
-            self.configure(bg=self.bgcolor)
-            self.configure(activebackground=self.bgcolor)
+            self.configure(bg=bgcolor, activebackground=bgcolor)
+            self.place(relwidth=self.relwidth, relheight=self.relheight)
 
     def __init__(self, parent, relx, rely, relwidth, relheight, parent_self):
-        self.parent = parent
-        self.relx = relx
-        self.rely = rely
-        self.relwidth = relwidth
-        self.relheight = relheight
-        self.parent_self = parent_self
-
-        self.state = 1
-
+        self.parent, self.relx, self.rely, self.relwidth, self.relheight, self.parent_self = parent, relx, rely, relwidth, relheight, parent_self
         self.defaults()
 
     def defaults(self):
@@ -43,8 +29,7 @@ class ConverterCycleButton(object):
         self.func3()
 
     def createFrames(self):
-        self.mainFrame = Frame(self.parent)
-        self.mainFrame.configure(bg=GrayScale(0))
+        self.mainFrame = MyFrame(self.parent, GrayScale(0))
         self.mainFrame.place(relx=self.relx, rely=self.rely, relwidth=self.relwidth, relheight=self.relheight)
 
         self.frame1 = MyFrame(self.mainFrame, GrayScale(80))
@@ -59,8 +44,10 @@ class ConverterCycleButton(object):
     def func1(self):
         self.parent_self.titleLabel.configure(text=self.names_list[1])
         self.frame2.tkraise()
-        self.parent_self.startCaseToggleButton.title_label.destroy()
-        self.parent_self.startCaseToggleButton.pf.destroy()
+
+        self.parent_self.startCaseToggleButton.titleLabel.destroy()
+        self.parent_self.startCaseToggleButton.mainFrame.destroy()
+
         self.state = 2
 
     def func2(self):

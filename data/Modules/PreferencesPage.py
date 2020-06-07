@@ -19,17 +19,23 @@ from data.MyVariables.preferences import dev
 
 
 # restart and quit functions
-def programRestart():
+def programRestart(*args):
     if dev:
         print('[program] restart')
+
     # code from 'https://blog.petrzemek.net/2014/03/23/restarting-a-python-script-within-itself/'
     execv(executable, ['python'] + argv)
 
+    return None
 
-def programQuit():
+
+def programQuit(*args):
     if dev:
         print('[program] quit')
+
     exit()
+
+    return None
 
 
 class PreferencesPage(object):
@@ -104,7 +110,7 @@ class PreferencesPage(object):
         self.font_size_entry.delete(0, END)
 
     def setAll(self):
-        # set all entries in GUI from imported vars from userconfig.py
+        # set all entries in GUI from imported vars from preferences.py
         self.clearALL()
 
         self.width_entry.insert(0, str(config_width))
@@ -151,10 +157,10 @@ class PreferencesPage(object):
         self.font_size_entry.insert(0, '12')
 
         setattr(self.tooltips_button, 'enabled', True)
-        self.tooltips_button.f2.tkraise()
+        self.tooltips_button.frame2.tkraise()
 
         setattr(self.dev_button, 'enabled', True)
-        self.dev_button.f2.tkraise()
+        self.dev_button.frame2.tkraise()
 
     def funcSave(self):
         # save and write to config

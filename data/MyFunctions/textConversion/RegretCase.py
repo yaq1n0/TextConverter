@@ -16,17 +16,14 @@ def RegretCase(text):
         pl = ''
 
         for letter in text:
-            if letter == 'r':
-                if pl != 'l':
-                    return_string += 'w'
+            if letter == 'r' and pl != 'l':
+                return_string += 'w'
 
-            elif letter == 'l':
-                if pl != 'r':
-                    return_string += 'w'
+            elif letter == 'l' and pl != 'r':
+                return_string += 'w'
 
-            elif letter == ' ':
-                if pl != '.':
-                    return_string += (' ' + pickRandomList(short_cringe) + ' ')
+            elif letter == ' ' and pl != '.':
+                return_string += (' ' + pickRandomList(short_cringe) + ' ')
 
             elif letter == '.':
                 return_string += (' ' + pickRandomList(long_cringe) + ' ')

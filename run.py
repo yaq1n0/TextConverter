@@ -1,4 +1,4 @@
-# template for Python Desktop App using Tkinter
+# TextConverter App
 
 # imports
 from tkinter import Tk
@@ -13,22 +13,29 @@ from data.MyVariables import dev
 
 
 # functions
-def programRestart(event):
+def programRestart(*args):
     if dev:
         print('[program] restart')
+
     # code from 'https://blog.petrzemek.net/2014/03/23/restarting-a-python-script-within-itself/'
     execv(executable, ['python'] + argv)
 
+    return None
 
-def programQuit(event):
+
+def programQuit(*args):
     if dev:
         print('[program] quit')
+
     exit()
+
+    return None
 
 
 # creating root
 root = Tk()
 root.title('TextConverter')
+root.iconbitmap('data/images/favicon.ico')
 root.resizable(False, False)
 root.geometry(makeGeometry(root, config_width, config_height))
 root.configure(bg=GrayScale(20))

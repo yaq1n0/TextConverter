@@ -4,16 +4,20 @@
 from data.MyFunctions.textConversion.dependencies import letters
 
 
-def AltCase(text, start_caps):
-    if type(text) != str:
-        print('[AltCase] Input not a string')
+def AltCase(input_text, start_caps):
+
+    if type(input_text) != str or type(start_caps) != bool:
+        if type(start_caps) != bool:
+            print('[AltCase] start_caps value not boolean')
+        else:
+            print('[AltCase] Input not a string')
         return None
 
     else:
-        text = text.lower()
+        input_text = input_text.lower()
         return_string = ''
 
-        # if startcaps then first letter capital, else first letter lowercase
+        # if start_caps then first letter capital, else first letter lowercase
         if type(start_caps) == bool:
             if start_caps:
                 i = True
@@ -23,7 +27,7 @@ def AltCase(text, start_caps):
             print('[AltCase], invalid start_caps value, use boolean')
             return None
 
-        for letter in text:
+        for letter in input_text:
             if letter in letters:
                 if i:
                     return_string += letter.upper()

@@ -4,16 +4,16 @@
 from data.MyFunctions.textConversion.dependencies import randBool, letters
 
 
-def RandomCase(text):
-    if type(text) != str:
+def RandomCase(input_text):
+    if type(input_text) != str:
         print('[RandomCase] Input not a string')
         return None
 
     else:
-        text = text.lower()
+        input_text = input_text.lower()
         return_string = ''
 
-        for letter in text:
+        for letter in input_text:
             if letter in letters:
                 if randBool():
                     return_string += letter.upper()
