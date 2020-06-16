@@ -16,7 +16,8 @@ replace_dict = {
     'neck ': 'necky wecky ~murr~ ',
     'likes ': 'likies (; ',
     'yes ': 'nya~ ',
-    'mhm ': 'mhm~ '
+    'mhm ': 'mhm~ ',
+    'no': 'nyo'
 }
 
 short_cringe = ['xD', 'x3', '~', '!!', ';)', ':3']
@@ -44,6 +45,32 @@ def replaceWord(text):
     for elem in replace_dict:
         text = text.replace(elem, replace_dict[elem])
     return text
+
+
+def replaceLetter(text):
+    # replace letters conditionally
+    return_string = ''
+    pl = ''
+
+    for letter in text:
+        if letter == 'r' and pl != 'l':
+            return_string += 'w'
+
+        elif letter == 'l' and pl != 'r':
+            return_string += 'w'
+
+        elif letter == ' ' and pl != '.':
+            return_string += (' ' + pickRandomList(short_cringe) + ' ')
+
+        elif letter == '.':
+            return_string += (' ' + pickRandomList(long_cringe) + ' ')
+
+        else:
+            return_string += letter
+
+        pl = letter
+
+    return return_string
 
 
 if __name__ == '__main__':
@@ -93,6 +120,15 @@ if __name__ == '__main__':
 
         print('replaceWord test done!')
 
+    def replaceLetterTest():
+        print('replaceLetter test')
+
+        test_word = 'Hello World'
+        print('test word:', test_word)
+        print('test replace:', replaceLetter(test_word))
+
+        print('replaceWord test done!')
+
 
     def testALL():
         printValues()
@@ -103,27 +139,50 @@ if __name__ == '__main__':
         print('----------------')
         replaceWordTest()
         print('----------------')
+        replaceLetterTest()
+        print('----------------')
         print('ALL tests complete')
 
 
-    test_choice = input('pick test (printValues, randBool, pickRandomList, replaceWord, ALL): ')
-    choice_list = ['printValues', 'randBool', 'pickRandomList', 'replaceWord', 'ALL']
+    choice_list = ['printValues', 'randBool', 'pickRandomList', 'replaceWord', 'replaceLetter', 'ALL']
 
-    while test_choice not in choice_list:
-        print('invalid input!')
-        test_choice = input('pick test (printValues, randBool, pickRandomList, replaceWord, ALL): ')
+    last_index = len(choice_list) - 1
+    prompt_text = 'pick test ('
 
-    if test_choice == 'printValues':
-        printValues()
+    for elem in choice_list:
+        prompt_text += elem
+        if choice_list.index(elem) != last_index:
+            prompt_text += ', '
 
-    elif test_choice == 'randBool':
-        randBoolTest()
+    prompt_text += ') or "END" to exit: '
 
-    elif test_choice == 'pickRandomList':
-        pickRandomListTest()
+    exitBool = False
 
-    elif test_choice == 'replaceWord':
-        replaceWordTest()
+    while not exitBool:
+        test_choice = input(prompt_text)
 
-    elif test_choice == 'ALL':
-        testALL()
+        choice_list.append('END')
+        while test_choice not in choice_list:
+            print('invalid input!')
+            test_choice = input(prompt_text)
+
+        if test_choice == 'printValues':
+            printValues()
+
+        elif test_choice == 'randBool':
+            randBoolTest()
+
+        elif test_choice == 'pickRandomList':
+            pickRandomListTest()
+
+        elif test_choice == 'replaceWord':
+            replaceWordTest()
+
+        elif test_choice == 'replaceLetter':
+            replaceLetterTest()
+
+        elif test_choice == 'ALL':
+            testALL()
+
+        elif test_choice == 'END':
+            exitBool = True

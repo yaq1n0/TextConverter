@@ -36,22 +36,27 @@ class StartPage(object):
         self.titleLabel.place(relwidth=0.50)
 
     def createButtons(self):
+        tmp = False
+
+
         def placeholder():
             pass
 
-        self.button1 = MyButton(self.mainFrame, 'Main', self.gotoMain, 0.25, 0.20)
-        self.button2 = MyButton(self.mainFrame, 'Button2', placeholder, 0.25, 0.30)
-        self.button3 = MyButton(self.mainFrame, 'Button3', placeholder, 0.25, 0.40)
-        self.button4 = MyButton(self.mainFrame, 'Button4', placeholder, 0.25, 0.50)
-        self.button5 = MyImageButton(self.mainFrame, GrayScale(20),
-                                     createTkImage('data/images/preferences.png', 48, 48),
-                                     self.gotoPreferences, 0.425, 0.65)
+        self.button1 = MyButton(self.mainFrame, 'Convert!', self.gotoMain, 0.25, 0.20)
+        if tmp:
+            self.button2 = MyButton(self.mainFrame, 'Button2', placeholder, 0.25, 0.30)
+            self.button3 = MyButton(self.mainFrame, 'Button3', placeholder, 0.25, 0.40)
+            self.button4 = MyButton(self.mainFrame, 'Button4', placeholder, 0.25, 0.50)
+            self.button5 = MyImageButton(self.mainFrame, GrayScale(20),
+                                         createTkImage('data/images/preferences.png', 48, 48),
+                                         self.gotoPreferences, 0.425, 0.65)
 
         self.button1.place(relwidth=0.50)
-        self.button2.place(relwidth=0.50)
-        self.button3.place(relwidth=0.50)
-        self.button4.place(relwidth=0.50)
-        self.button5.place(relwidth=0.15, relheight=0.075)
+        if tmp:
+            self.button2.place(relwidth=0.50)
+            self.button3.place(relwidth=0.50)
+            self.button4.place(relwidth=0.50)
+            self.button5.place(relwidth=0.15, relheight=0.075)
 
     def createCreditsLabel(self):
         credits_text = 'Created By: Yaqin Hasan'

@@ -1,7 +1,7 @@
 # regret case
 
 # imports
-from data.MyFunctions.textConversion.dependencies import pickRandomList, replaceWord, short_cringe, long_cringe
+from data.MyFunctions.textConversion.dependencies import replaceWord, replaceLetter
 
 
 def RegretCase(text):
@@ -11,33 +11,11 @@ def RegretCase(text):
 
     else:
         text = text.lower()
-        return_string = ''
-
-        pl = ''
-
-        for letter in text:
-            if letter == 'r' and pl != 'l':
-                return_string += 'w'
-
-            elif letter == 'l' and pl != 'r':
-                return_string += 'w'
-
-            elif letter == ' ' and pl != '.':
-                return_string += (' ' + pickRandomList(short_cringe) + ' ')
-
-            elif letter == '.':
-                return_string += (' ' + pickRandomList(long_cringe) + ' ')
-
-            else:
-                return_string += letter
-
-            pl = letter
-
-        return_string = replaceWord(return_string)
-
-        return return_string
+        text = replaceWord(text)
+        text = replaceLetter(text)
+        return text
 
 
 if __name__ == '__main__':
-    test_string = 'Hello World. yes '
+    test_string = 'Hello World. '
     print('[test]:', RegretCase(test_string))
